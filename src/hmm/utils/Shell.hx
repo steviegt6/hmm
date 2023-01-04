@@ -212,14 +212,13 @@ class Shell {
           if (options.log) {
             Log.warning('git library "$name" has no remote origin, not checking installation url');
           }
-          true;
-        case Some(remote) :
-          if (remote != url) {
-            if (options.log) {
-              Log.warning('git library: "$name" (url: "${url}") does not match currently-installed url: "${remote}"');
-            }
-            false;
+          return true;
+        case Some(remote) if (remote != url) :
+          if (options.log) {
+            Log.warning('git library: "$name" (url: "${url}") does not match currently-installed url: "${remote}"');
           }
+          return false;
+        case Some(_) : {}
       }
 
       //endregion
