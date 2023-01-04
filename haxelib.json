@@ -1,6 +1,6 @@
 {
   "name": "hmm",
-  "url": "https://github.com/andywhite37/hmm",
+  "url": "https://github.com/steviegt6/hmm",
   "license": "MIT",
   "tags": ["tools", "helpers", "installation"],
   "description": "Local haxelib installation helper",
