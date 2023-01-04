@@ -9,7 +9,7 @@
   "releasenote": "Add lock command from elsassph",
   "contributors": ["andywhite37"],
   "dependencies": {
-    "utest": "1.5.0",
-    "thx.core": "0.42.1"
+    "utest": "1.13.2",
+    "thx.core": "0.44.0"
   }
 }
