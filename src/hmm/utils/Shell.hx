@@ -200,6 +200,30 @@ class Shell {
       }
       false;
     } else {
+
+      //region tomat/git-remote-fix
+
+      // TODO: origin isn't guaranteed to be the, well, actual origin. depends
+      // on the user. mostly likely suits our needs but may need further
+      // consideration later.
+      var currRemote = gitRemoteGetUrlPush(haxelibPathResult.path, "origin", { log: false, throwError: false });
+      switch (currRemote) {
+        case None :
+          if (options.log) {
+            Log.warning('git library "$name" has no remote origin, not checking installation url');
+          }
+          true;
+        case Some(remote) :
+          if (remote != url) {
+            if (options.log) {
+              Log.warning('git library: "$name" (url: "${url}") does not match currently-installed url: "${remote}"');
+            }
+            false;
+          }
+      }
+
+      //endregion
+
       switch ref {
         case None :
           if (options.log) {
@@ -302,6 +326,22 @@ class Shell {
       Some(revParseResult.stdout.replace("\n", ""));
     }
   }
+
+  //region tomat/git-remote-fix
+
+  public static function gitRemoteGetUrlPush(path : String, remote : String, options: { log: Bool, throwError: Bool }) : Option<String> {
+    var oldCwd = Shell.workingDirectory;
+    setCwd(path, options);
+    var remoteGetUrlResult = readCommand("git", ["remote", "get-url", "--push", remote], options);
+    setCwd(oldCwd, options);
+    return if (remoteGetUrlResult.statusCode != 0) {
+      None;
+    } else {
+      Some(remoteGetUrlResult.stdout.replace("\n", ""));
+    }
+  }
+
+  //endregion
 
   static function runCommand(cmd : String, args : Array<String>, options: { log: Bool, throwError: Bool }) : Void {
     var commandString = '$cmd ${args.join(" ")}';
